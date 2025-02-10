@@ -1,0 +1,452 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 1rem;
+    background-color: #181818;
+    color: #ecf0f1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-container {
+    --background: linear-gradient(to left, #f7ba2b 0%, #ea5358 100%);
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 1rem;
+    position: relative;
+    background: var(--background);
+    z-index: 1;
+    overflow: visible;
+}
+
+@media (min-width: 768px) {
+    .game-container {
+        padding: 2rem;
+    }
+}
+
+.game-container::after {
+    position: absolute;
+    content: "";
+    top: 30px;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    transform: scale(0.8);
+    filter: blur(25px);
+    background: var(--background);
+    transition: opacity .5s;
+}
+
+.game-content {
+    background: #181818;
+    color: #181818;
+    padding: 1rem;
+    border-radius: 0.7rem;
+    transition: color 1s;
+}
+
+@media (min-width: 768px) {
+    .game-content {
+        padding: 2rem;
+    }
+}
+
+.game-container:hover::after {
+    opacity: 0;
+}
+
+.game-container:hover .game-content {
+    color: #f7ba2b;
+}
+
+.choices {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+@media (min-width: 768px) {
+    .choices {
+        flex-direction: row;
+        justify-content: center;
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+}
+
+button {
+    --btn-background: linear-gradient(to left, #f7ba2b 0%, #ea5358 100%);
+    width: 100%;
+    max-width: 200px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 12px;
+    background: var(--btn-background);
+    color: white;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    button {
+        padding: 1rem 2rem;
+        font-size: 1.2rem;
+    }
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--btn-background);
+    opacity: 0;
+    transition: opacity 0.5s;
+    z-index: -1;
+}
+
+button:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 4px 15px rgba(247, 186, 43, 0.3);
+}
+
+button:hover::after {
+    opacity: 0.7;
+}
+
+button.reset {
+    --btn-background: linear-gradient(to left, #ea5358 0%, #d62d33 100%);
+    margin-top: 1rem;
+}
+
+.score {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1rem 0;
+    font-size: 1.1rem;
+    background-color: #242424;
+    padding: 0.8rem;
+    border-radius: 8px;
+}
+
+@media (min-width: 768px) {
+    .score {
+        gap: 4rem;
+        margin: 1.5rem 0;
+        font-size: 1.3rem;
+        padding: 1rem;
+    }
+}
+
+.result {
+    margin: 1rem 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-height: 2rem;
+    padding: 0.8rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+    .result {
+        margin: 1.5rem 0;
+        font-size: 1.4rem;
+        padding: 1rem;
+    }
+}
+
+.choices-display {
+    margin: 1rem 0;
+    font-size: 1rem;
+    background-color: #242424;
+    padding: 0.8rem;
+    border-radius: 8px;
+}
+
+@media (min-width: 768px) {
+    .choices-display {
+        margin: 1.5rem 0;
+        font-size: 1.2rem;
+        padding: 1rem;
+    }
+}
+
+.history {
+    margin-top: 1.5rem;
+    padding: 0.8rem;
+    border-top: 2px solid #242424;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+    .history {
+        margin-top: 2rem;
+        padding: 1rem;
+        max-height: 250px;
+    }
+}
+
+.history-item {
+    padding: 0.6rem;
+    margin: 0.6rem 0;
+    background-color: #242424;
+    border-radius: 8px;
+    animation: slideIn 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .history-item {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem;
+        margin: 0.8rem 0;
+    }
+}
+
+@keyframes slideIn {
+    from { 
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes popIn {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 5px #f7ba2b; }
+    50% { box-shadow: 0 0 20px #f7ba2b; }
+    100% { box-shadow: 0 0 5px #f7ba2b; }
+}
+
+.winner {
+    color: #f7ba2b;
+    animation: glow 1s ease infinite;
+}
+
+.loser {
+    color: #ea5358;
+}
+
+.choice-icon {
+    font-size: 1.3rem;
+    margin-right: 0.3rem;
+}
+
+@media (min-width: 768px) {
+    .choice-icon {
+        font-size: 1.5rem;
+        margin-right: 0.5rem;
+    }
+}
+
+.timestamp {
+    font-size: 0.8rem;
+    color: #95a5a6;
+}
+
+@media (min-width: 768px) {
+    .timestamp {
+        font-size: 0.9rem;
+    }
+}
+
+.history::-webkit-scrollbar {
+    width: 6px;
+}
+
+@media (min-width: 768px) {
+    .history::-webkit-scrollbar {
+        width: 8px;
+    }
+}
+
+.history::-webkit-scrollbar-track {
+    background: #242424;
+    border-radius: 4px;
+}
+
+.history::-webkit-scrollbar-thumb {
+    background: #f7ba2b;
+    border-radius: 4px;
+}
+
+.active-choice {
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+h1 {
+    color: #f7ba2b;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    h1 {
+        margin-bottom: 2rem;
+        font-size: 2rem;
+    }
+}
+ /* ic* jk/
+        /* Container for Social Icons */
+        .header__social {
+            position: fixed;
+            top: 20px;
+            /* Adjust this value to fine-tune vertical position */
+            /*right: auto; /* Adjust this value to fine-tune horizontal position */
+            right: 20px;
+            /* Adjust this value to fine-tune vertical position */
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            /* Space between icons */
+            z-index: 1000;
+            /* Ensure it's on top of other content */
+        }
+
+        /* Social Icon Style */
+        .header__social .header__icon {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            /* Light shadow for better visibility */
+            color: #4d4d4d;
+            /* Default icon color */
+            transition: all 0.3s ease-in-out;
+            font-size: 24px;
+        }
+
+        /* Hover Effects for Icons */
+        .header__social .header__icon:hover {
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+            /* Darker shadow on hover */
+            transform: translateY(-5px);
+            /* Lift the icon on hover */
+        }
+
+        /* Tooltip Style */
+        .header__social .tooltip {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        /* Tooltip Visibility on Hover */
+        .header__social .header__icon:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            top: -50px;
+            /* Adjust tooltip position */
+        }
+
+        /* Individual Social Icons (Colors) */
+        .header__social .header__icon a[data-social="linkedin"] {
+            background-color: #0077b5;
+            color: #fff;
+        }
+
+        .header__social .header__icon a[data-social="github"] {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .header__social .header__icon a[data-social="behance"] {
+            background-color: #1769ff;
+            color: #fff;
+        }
+
+        .header__social .header__icon a[data-social="facebook"] {
+            background-color: #1877f2;
+            color: #fff;
+        }
+
+        .header__social .header__icon a[data-social="instagram"] {
+            background-color: #e4405f;
+            color: #fff;
+        }
+
+        .header__social .header__icon a[data-social="twitter"] {
+            background-color: #1da1f2;
+            color: #fff;
+        }
+
+        /* Header Styling */
+        .header {
+            position: fixed;
+            top: 20px;
+            /* Distance from the top */
+            left: 20px;
+            /* Distance from the left */
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            z-index: 1000;
+            /* Keeps it on top of other elements */
+        }
+
+        .logo img {
+            max-width: 150px;
+            /* Adjust the logo size */
+            height: auto;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+
+        /* Optional: Hover effect for the logo */
+        .logo img:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+</head>
+
+<div class="header__social">
+    <div class="header__icon tooltip-container" data-social="linkedin">
+        <a href="https://www.linkedin.com/in/jesu-khamrui-3abaa8340/" target="_blank">
+            <i class='bx bxl-linkedin'></i>
+        </a>
+        <div class="tooltip">LinkedIn</div>
+    </div>
+    <div class="header__icon tooltip-container" data-social="github">
+        <a href="https://github.com/Jesukhamrui" target="_blank">
+            <i class='bx bxl-github'></i>
+        </a>
+        <div class="tooltip">GitHub</div>
+    </div>
+    <div class="header__icon tooltip-container" data-social="behance">
+        <a href="https://www.behance.net/jesukhamrui" target="_blank">
+            <i class='bx bxl-behance'></i>
+        </a>
+        <div class="tooltip">Behance</div>
+    </div>
+    <div class="header__icon tooltip-container" data-social="facebook">
+        <a href="https://www.facebook.com/profile.php?id=100070173125692" target="_blank">
+            <i class='bx bxl-facebook'></i>
+        </a>
+        <div class="tooltip">Facebook</div>
+    </div>
+    <div class="header__icon tooltip-container" data-social="instagram">
+        <a href="https://www.instagram.com/jesu_khamrui" target="_blank">
+            <i class='bx bxl-instagram'></i>
+        </a>
+        <div class="tooltip">Instagram</div>
+    </div>
+    <div class="header__icon tooltip-container" data-social="twitter">
+        <a href="https://www.twitter.com/yourprofile" target="_blank">
+            <i class='bx bxl-twitter'></i>
+        </a>
+        <div class="tooltip">Twitter</div>
+    </div>
+</div>
+<body>
+    <div class="game-container">
+        <div class="game-content">
+            <!-- Previous HTML structure remains unchanged -->
+            <h1>Rock Paper Scissors</h1>
+
+            <div class="score">
+                <div>Player: <span id="playerScore">0</span></div>
+                <div>Computer: <span id="computerScore">0</span></div>
+            </div>
+
+            <div class="choices-display">
+                <div>Your choice: <span id="playerChoice">-</span></div>
+                <div>Computer's choice: <span id="computerChoice">-</span></div>
+            </div>
+
+            <div class="result" id="result"></div>
+
+            <div class="choices">
+                <button onclick="play('Rock')">✊ Rock</button>
+                <button onclick="play('Paper')">✋ Paper</button>
+                <button onclick="play('Scissors')">✌️ Scissors</button>
+            </div>
+
+            <button class="reset" onclick="resetGame()">Reset Game</button>
+
+            <div class="history">
+                <h3>Battle Log</h3>
+                <div id="historyList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
