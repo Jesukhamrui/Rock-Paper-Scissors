@@ -1,169 +1,162 @@
-let playerScore = 0;
-    let computerScore = 0;
-    let gameHistory = [];
+const options = ["rock", "paper", "scissor"];
+let score = {
+  you: 0,
+  computer: 0
+};
+const WIN_GREEN = "#6ac475";
+const LOSE_RED = "#c4736a";
+const DRAW_BLUE = "#5865f2";
 
-    // Create sound effects using oscillator nodes for distinct sounds
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+const playerHand = document.querySelector(".hands .player-hand");
+const computerHand = document.querySelector(".hands .computer-hand");
 
-    function createWinSound() {
-        const duration = 1;
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
-        oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.2); // E5
-        oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.4); // G5
-        
-        gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + duration);
-    }
+function getRandomInt() {
+  return Math.floor(Math.random() * 3);
+}
 
-    function createTieSound() {
-        const duration = 0.8;
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4
-        oscillator.frequency.setValueAtTime(440, audioContext.currentTime + 0.4); // A4 again
-        
-        gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + duration);
-    }
+const btns = document.querySelectorAll(".options button");
+btns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelector(".hands .player-hand").src = "rock.png";
+    document.querySelector(".hands .computer-hand").src = "rock.png";
+    playerHand.classList.add('shakePlayer')
+    computerHand.classList.add('shakeComputer')
+    const playerA = btn.querySelector("label").innerText;
+    const playerB = options[getRandomInt()];
+    setTimeout(()=>compare(playerA, playerB),1000)
+    
+  });
+});
 
-    function createLoseSound() {
-        const duration = 1;
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(493.88, audioContext.currentTime); // B4
-        oscillator.frequency.setValueAtTime(466.16, audioContext.currentTime + 0.2); // Bb4
-        oscillator.frequency.setValueAtTime(440, audioContext.currentTime + 0.4); // A4
-        
-        gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + duration);
-    }
+function compare(player, computer) {
+  const won = "YOU WON";
+  const lose = "YOU LOST";
+  const resultEl = document.querySelector(".hands .result");
+  const youScore = document.querySelector(".score .you");
+  const computerScore = document.querySelector(".score .computer");
 
-    function getComputerChoice() {
-        const choices = ['Rock', 'Paper', 'Scissors'];
-        return choices[Math.floor(Math.random() * choices.length)];
-    }
+  if (player == computer) {
+    console.log(`${player} is equal to ${computer}`);
+    update(player, computer);
+    resultEl.style.color = DRAW_BLUE;
+    resultEl.innerText = "DRAW";
+  } else if (player == "rock" && computer == "scissor") {
+    console.log(`${player} defeats ${computer}`);
+    update(player, computer);
+    score.you++;
+    resultEl.style.color = WIN_GREEN;
+    resultEl.innerText = won;
+    youScore.innerText = score.you;
+  } else if (player == "rock" && computer == "paper") {
+    console.log(`${player} loses to ${computer}`);
+    update(player, computer);
+    score.computer++;
+    resultEl.style.color = LOSE_RED;
+    resultEl.innerText = lose;
+    computerScore.innerText = score.computer;
+  } else if (player == "paper" && computer == "scissor") {
+    console.log(`${player} loses to ${computer}`);
+    update(player, computer);
+    score.computer++;
+    resultEl.style.color = LOSE_RED;
+    resultEl.innerText = lose;
+    computerScore.innerText = score.computer;
+  } else if (player == "paper" && computer == "rock") {
+    console.log(`${player} defeats ${computer}`);
+    update(player, computer);
+    score.you++;
+    resultEl.style.color = WIN_GREEN;
+    resultEl.innerText = won;
+    youScore.innerText = score.you;
+  } else if (player == "scissor" && computer == "rock") {
+    console.log(`${player} loses to ${computer}`);
+    update(player, computer);
+    score.computer++;
+    resultEl.style.color = LOSE_RED;
+    resultEl.innerText = lose;
+    computerScore.innerText = score.computer;
+  } else if (player == "scissor" && computer == "paper") {
+    console.log(`${player} defeats ${computer}`);
+    update(player, computer);
+    score.you++;
+    resultEl.style.color = WIN_GREEN;
+    resultEl.innerText = won;
+    youScore.innerText = score.you;
+  }
+  // playerHand.classList.remove('shake')
+  // computerHand.classList.remove('shake')
+}
+function update(player, computer) {
+  const rock = "rock.png";
+  const paper = "paper.png";
+  const scissor = "scissor.png";
 
-    function getChoiceEmoji(choice) {
-        const emojis = {
-            'Rock': '✊',
-            'Paper': '✋',
-            'Scissors': '✌️'
-        };
-        return emojis[choice];
-    }
+  // playerHand
+  if (player == "rock") {
+    playerHand.src = rock;
+  } else if (player == "paper") {
+    playerHand.src = paper;
+  } else if (player == "scissor") {
+    playerHand.src = scissor;
+  }
 
-    function determineWinner(playerChoice, computerChoice) {
-        if (playerChoice === computerChoice) return 'tie';
-        
-        const winConditions = {
-            'Rock': 'Scissors',
-            'Paper': 'Rock',
-            'Scissors': 'Paper'
-        };
-        
-        return winConditions[playerChoice] === computerChoice ? 'player' : 'computer';
-    }
+  // computerHand
+  if (computer == "rock") {
+    computerHand.src = rock;
+  } else if (computer == "paper") {
+    computerHand.src = paper;
+  } else if (computer == "scissor") {
+    computerHand.src = scissor;
+  }
+  playerHand.classList.remove('shakePlayer')
+  computerHand.classList.remove('shakeComputer')
+}
 
-    function updateHistory(playerChoice, computerChoice, winner) {
-        const timestamp = new Date().toLocaleTimeString();
-        const historyItem = document.createElement('div');
-        historyItem.className = 'history-item';
-        
-        const resultText = winner === 'tie' ? 'Tie!' : 
-                         winner === 'player' ? 'You won!' : 'Computer won!';
-        
-        historyItem.innerHTML = `
-            <div>
-                <span class="choice-icon">${getChoiceEmoji(playerChoice)}</span> vs 
-                <span class="choice-icon">${getChoiceEmoji(computerChoice)}</span>
-                <span class="${winner === 'player' ? 'winner' : winner === 'computer' ? 'loser' : ''}">${resultText}</span>
-            </div>
-            <span class="timestamp">${timestamp}</span>
-        `;
-        
-        const historyList = document.getElementById('historyList');
-        historyList.insertBefore(historyItem, historyList.firstChild);
-    }
 
-    function updateScoreDisplay() {
-        document.getElementById('playerScore').textContent = playerScore;
-        document.getElementById('computerScore').textContent = computerScore;
-    }
+//Reset Game Button ---------------------------------
+const resetBtn = document.querySelector(".reset");
+resetBtn.addEventListener("click", () => {
+  score.you = 0;
+  score.computer = 0;
+  document.querySelector(".score .you").innerText = score.you;
+  document.querySelector(".score .computer").innerText = score.computer;
+  document.querySelector(".hands .result").innerText = "";
+  document.querySelector(".hands .player-hand").src = "rock.png";
+  document.querySelector(".hands .computer-hand").src = "rock.png";
+});
 
-    function play(playerChoice) {
-        // Resume audio context if it's suspended (browsers require user interaction)
-        if (audioContext.state === 'suspended') {
-            audioContext.resume();
-        }
 
-        const computerChoice = getComputerChoice();
-        
-        document.getElementById('playerChoice').textContent = `${getChoiceEmoji(playerChoice)} ${playerChoice}`;
-        document.getElementById('computerChoice').textContent = `${getChoiceEmoji(computerChoice)} ${computerChoice}`;
-        
-        const winner = determineWinner(playerChoice, computerChoice);
-        
-        if (winner === 'player') {
-            playerScore++;
-            createWinSound();
-            document.getElementById('result').textContent = 'You won! 🎉';
-            document.getElementById('result').className = 'result winner';
-        } else if (winner === 'computer') {
-            computerScore++;
-            createLoseSound();
-            document.getElementById('result').textContent = 'Computer won! 🤖';
-            document.getElementById('result').className = 'result loser';
-        } else {
-            createTieSound();
-            document.getElementById('result').textContent = 'It\'s a tie! 🤝';
-            document.getElementById('result').className = 'result';
-        }
-        
-        updateScoreDisplay();
-        updateHistory(playerChoice, computerChoice, winner);
-        
-        document.querySelectorAll('.choices button').forEach(button => {
-            if (button.textContent.includes(playerChoice)) {
-                button.classList.add('active-choice');
-                setTimeout(() => button.classList.remove('active-choice'), 500);
-            }
-        });
-    }
+// // Mapping
+// // 0 -> rock, 1->paper, 2->scissor
+// const options = ["rock", "paper", "scissor"];
 
-    function resetGame() {
-        playerScore = 0;
-        computerScore = 0;
-        gameHistory = [];
-        document.getElementById('playerChoice').textContent = '-';
-        document.getElementById('computerChoice').textContent = '-';
-        document.getElementById('result').textContent = '';
-        document.getElementById('result').className = 'result';
-        document.getElementById('historyList').innerHTML = '';
-        updateScoreDisplay();
-    }
+// // number
+// /**
+//  *
+//  * @param {number} player1Choice
+//  * @param {number} player2Choice
+//  * return string player1, player2, draw
+//  */
+// function whoWon(player1Choice, player2Choice) {
+//   /**
+//    * 0, 0 => draw
+//    * 0, 1 => rock
+//    * 0, 2 => scissor
+//    * 1, 0 => rock
+//    * 1, 1 => draw
+//    * 1, 2
+//    * 2, 0
+//    * 2, 1
+//    * 2, 2 => draw
+//    */
+// }
+
+// function generateComputerChoice() {
+//   let a = options[getRandomInt(3)];
+//   console.log(a);
+// }
+// generateComputerChoice();
+
+// function getRandomInt(max) {
+//   return Math.floor(Math.random() * max);
+// }
